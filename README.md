@@ -1,0 +1,2 @@
+# MPU6050_SENSOR_AYAFARID_TASK1M
+Accelerometer and Gyroscope MPU SENSOR
