@@ -1,0 +1,75 @@
+#include <Wire.h>
+
+#define power_resister = 0x2D
+#define X_Axis_Register_DATAX0 0x32
+#define X_Axis_Register_DATAX1 0x33
+#define Y_Axis_Register_DATAY0 0x34 
+#define Y_Axis_Register_DATAY1 0x35
+#define Z_Axis_Register_DATAZ0 0x36
+#define Z_Axis_Register_DATAZ1 0x37
+int ADXAddress = 0x53;
+int X0,X1,X_out;
+int Y0,Y1,Y_out;
+int Z1,Z0,Z_out;
+float Xa,Ya,Za;
+void setup() {
+  // put your setup code here, to run once:
+  Wire.begin();
+  Serial.begin(9600);
+  delay(100);
+
+  Wire.beginTransmission(ADXAddress);
+  Wire.write(Power_Register);
+  Wire.write(8); 
+  Wire.endTransmission();
+  
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  Wire.beginTransmission(ADXAddress);
+  Wire.write(X_Axis_Register_DATAX0);
+  Wire.write(X_Axis_Register_DATAX1); 
+
+  Wire.requestFrom(ADXAddress,2);
+  if(Wire.available()<=2) { 
+    X0 = Wire.read();
+    X1 = Wire.read();
+    X1=X1<<8;
+    X_out =X0+X1;
+    Xa=X_out/256.0; 
+  }
+
+  Wire.beginTransmission(ADXAddress); 
+  Wire.write(Y_Axis_Register_DATAY0);
+  Wire.write(Y_Axis_Register_DATAY1);  
+  Wire.endTransmission(); 
+  Wire.requestFrom(ADXAddress,2);
+  if(Wire.available()<=2) { 
+    Y0 = Wire.read();
+    Y1 = Wire.read();
+    Y1=Y1<<8;
+    Y_out =Y0+Y1;
+    Ya=Y_out/256.0;
+  }
+
+  Wire.beginTransmission(ADXADRESS);
+  Wire.write(Z_Axis_Register_DATAZ0);
+  Wire.write(Z_Axis_Register_DATAZ1);
+  Wire.endTransmission();
+  Wire.requestFrom(ADXADRESS,2);
+  if(Wire.available()<=2)
+  {
+    Z0 = Wire.read();
+    Z1 = Wire.read();
+    Z1 = Z1 << 8;
+    Z_out = Z1 + z0;
+    Za = Z_out /256.0 ;
+  }
+  Serial.print("x= ");
+  Serial.print(Xa);
+  Serial.print("Y= ");
+  Serial.print(Ya);
+  Serial.print("Z= ");
+  Serial.print(Za);
+}
